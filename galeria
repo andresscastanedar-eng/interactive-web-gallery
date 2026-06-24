@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería Proyecto de Biología</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --verde-principal: #4f6b45;
+            --verde-secundario: #738a5e;
+            --beige: #efe3c2;
+            --beige-claro: #f7f1df;
+            --terracota: #b66a4d;
+            --marron: #6d5b45;
+            --overlay-gradient: linear-gradient(
+                to top,
+                rgba(30, 24, 16, 0.88) 0%,
+                rgba(30, 24, 16, 0.55) 45%,
+                rgba(30, 24, 16, 0.0) 100%
+            );
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Jost', sans-serif;
+            background:
+                radial-gradient(circle at 15% 25%, rgba(79,107,69,.07) 0%, transparent 40%),
+                radial-gradient(circle at 85% 70%, rgba(182,106,77,.06) 0%, transparent 35%),
+                var(--beige-claro);
+            color: var(--marron);
+        }
+
+        .page-header {
+            padding: 3.5rem 0 2rem;
+            text-align: center;
+        }
+
+        .page-header .eyebrow {
+            font-family: 'Jost', sans-serif;
+            font-weight: 300;
+            font-size: .72rem;
+            letter-spacing: .35em;
+            text-transform: uppercase;
+            color: var(--verde-secundario);
+            margin-bottom: .6rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+            font-size: clamp(2.4rem, 5vw, 3.8rem);
+            line-height: 1.1;
+            color: var(--verde-principal);
+            margin-bottom: 0;
+        }
+
+        .page-header h1 em {
+            font-style: italic;
+            color: var(--terracota);
+        }
+
+        .divider {
+            width: 48px;
+            height: 1px;
+            background: var(--terracota);
+            margin: 1.4rem auto 0;
+            opacity: .5;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: auto auto;
+            gap: 12px;
+            padding: 0 0 12px;
+        }
+
+        .gallery-grid .media-item:first-child {
+            grid-row: span 1;
+        }
+
+        .media-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 6px;
+            cursor: default;
+            background-color: #d8cdb5; 
+        }
+        .media-item .ratio-box {
+            position: relative;
+            width: 100%;
+            padding-top: 70%;         
+        }
+        .media-item.video-item .ratio-box {
+            padding-top: 56.25%;   
+        }
+
+        .media-item img,
+        .media-item video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform .55s cubic-bezier(.25,.46,.45,.94);
+        }
+
+        .media-item .placeholder-icon {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: rgba(109,91,69,.28);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: .78rem;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            gap: .5rem;
+            pointer-events: none;
+            transition: opacity .3s;
+        }
+
+        .media-item .placeholder-icon svg {
+            width: 36px;
+            height: 36px;
+            opacity: .45;
+        }
+
+        .media-item img[src]:not([src=""]) ~ .placeholder-icon,
+        .media-item video[src]:not([src=""]) ~ .placeholder-icon {
+            opacity: 0;
+        }
+
+        .hover-overlay {
+            position: absolute;
+            inset: 0;
+            background: var(--overlay-gradient);
+            opacity: 0;
+            transition: opacity .4s ease;
+            pointer-events: none;
+            border-radius: inherit;
+        }
+
+        .hover-text {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.4rem 1.2rem 1.1rem;
+            transform: translateY(8px);
+            opacity: 0;
+            transition: opacity .4s ease, transform .4s ease;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .hover-text .label {
+            font-family: 'Jost', sans-serif;
+            font-weight: 300;
+            font-size: .6rem;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,.55);
+            margin-bottom: .3rem;
+            z-index: 2;
+            z-index: 2;
+        }
+
+        .hover-text h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            font-size: 1.15rem;
+            color: #fff;
+            margin-bottom: .35rem;
+            line-height: 1.25;
+            z-index: 2;
+        }
+
+        .hover-text p {
+            font-family: 'Jost', sans-serif;
+            font-weight: 300;
+            font-size: .72rem;
+            color: rgba(255,255,255,.72);
+            line-height: 1.55;
+            margin: 0;
+            z-index: 2;
+        }
+
+        .media-item:hover .hover-overlay { opacity: 1; }
+        .media-item:hover .hover-text    { opacity: 1; transform: translateY(0); }
+        .media-item:hover img,
+        .media-item:hover video          { transform: scale(1.04); }
+
+        .section-label {
+            font-family: 'Jost', sans-serif;
+            font-weight: 300;
+            font-size: .68rem;
+            letter-spacing: .3em;
+            text-transform: uppercase;
+            color: var(--verde-secundario);
+            text-align: center;
+            padding: 2rem 0 .8rem;
+        }
+
+        .page-footer {
+            text-align: center;
+            padding: 2.5rem 0 2rem;
+            font-family: 'Jost', sans-serif;
+            font-size: .72rem;
+            font-weight: 300;
+            letter-spacing: .08em;
+            color: rgba(109,91,69,.5);
+        }
+
+        @media (max-width: 576px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" style="max-width: 860px;">
+
+    <!-- encabezado -->
+    <header class="page-header">
+        <p class="eyebrow">Proyecto Biología</p>
+        <h1>Galería del <em>Proyecto</em></h1>
+        <div class="divider"></div>
+    </header>
+
+    <!-- grid de imagenes -->
+    <div class="gallery-grid">
+
+        <!-- Imagen 1 -->
+        <div class="media-item">
+    <div class="ratio-box">
+        <img src="https://i.imgur.com/ZkWWyKj.png" alt="Imagen 1 — Fermentación">
+        <div class="placeholder-icon" style="display:none">  <!-- ← agregar display:none -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <path d="M21 15l-5-5L5 21"/>
+            </svg>
+                </div>
+                <div class="hover-overlay"></div>
+                <div class="hover-text">
+                    <p class="label">Observación</p>
+                    <h3>Previa</h3>
+                    <p>Planteamiento del proyecto y recolección de material.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Imagen 2 -->
+        <div class="media-item">
+            <div class="ratio-box">
+                <img src="https://i.imgur.com/btJHiGC.png" alt="Imagen 2 — Fermentación">
+                <div class="placeholder-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <path d="M21 15l-5-5L5 21"/>
+                    </svg>
+                    Imagen 2
+                </div>
+                <div class="hover-overlay"></div>
+                <div class="hover-text">
+                    <p class="label">Proceso</p>
+                    <h3>Preparación</h3>
+                    <p>Proceso de fermentación.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Imagen 3 -->
+        <div class="media-item">
+            <div class="ratio-box">
+                <img src="https://i.imgur.com/ltZDZXj.png" alt="Imagen 3 — Fermentación">
+                <div class="placeholder-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <path d="M21 15l-5-5L5 21"/>
+                    </svg>
+                    Imagen 3
+                </div>
+                <div class="hover-overlay"></div>
+                <div class="hover-text">
+                    <p class="label">Resultado</p>
+                    <h3>Final</h3>
+                    <p>Conclusión del proyecto.</p>a
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Footer -->
+    <footer class="page-footer">
+        © 2026 Andrés Castañeda &nbsp;·&nbsp; Fermentación
+    </footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
