@@ -64,3 +64,11 @@ This project demonstrates the ability to build basic web applications with a str
 * Usability
 * Modern design
 * Clear structure
+
+## Live Demo
+
+<p align="center">
+  <a href="https://sites.google.com/view/examenfinalprogra/home" target="_blank">
+    <img src="https://img.shields.io/badge/View-Live%20Project-green?style=for-the-badge">
+  </a>
+</p>
